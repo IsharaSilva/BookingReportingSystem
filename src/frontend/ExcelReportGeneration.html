@@ -3,68 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Isolated Document Export Utility</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-            padding: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .export-container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            max-width: 400px;
-            border-top: 5px solid #217346;
-        }
-        h2 {
-            color: #1f2937;
-            margin-top: 0;
-        }
-        p {
-            color: #4b5563;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-        .btn-download {
-            background-color: #217346;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            display: inline-block;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 6px rgba(33, 115, 70, 0.2);
-        }
-        .btn-download:hover {
-            background-color: #1a5c38;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(33, 115, 70, 0.3);
-        }
-        .btn-download:active {
-            transform: translateY(0);
-        }
-    </style>
+    <title>Data Export</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-gray-100 flex items-center justify-center h-screen m-0">
 
-<div class="export-container">
-    <h2>Data Export Sandbox</h2>
-    <p>This page connects directly to your Spring Boot Excel controller. Clicking the button will stream all 1,000 raw ledger rows from the database into a cleanly formatted workbook.</p>
+<div class="bg-white p-10 rounded-xl shadow-md text-center max-w-sm border-t-4 border-emerald-800">
 
-<!--    <a href="http://localhost:8080/api/excel/download" class="btn-download">-->
-<!--        📊 Download Full Excel Ledger-->
-<!--    </a>-->
+    <h2 class="text-xl font-bold text-gray-800 mb-2">Data Export</h2>
+
+    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+        live ledger records into an Excel Sheet.
+    </p>
+
+    <a href="http://localhost:8080/api/excel/download"
+       class="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-3 px-6 rounded-lg shadow-sm transition duration-200 transform hover:-translate-y-0.5">
+        <span>📊</span> ExcelReportGenerate
+    </a>
+
 </div>
 
 </body>
