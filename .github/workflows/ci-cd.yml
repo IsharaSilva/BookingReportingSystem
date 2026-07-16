@@ -10,17 +10,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Spin up a MySQL service container
     services:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_DATABASE: booking_system_test
-          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: booking_system_db
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
-        # Wait until MySQL is healthy and ready to receive connections
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        # Robust health check to block steps until MySQL is healthy
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -32,9 +35,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # A short pause to guarantee MySQL is fully listening on port 3306
+      - name: Wait for MySQL to boot
+        run: sleep 10
+
       - name: Build with Maven
         run: mvn -B clean package
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/booking_system_test?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/booking_system_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: root
