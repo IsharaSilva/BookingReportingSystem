@@ -38,6 +38,12 @@ public class BookingController {
             return ResponseEntity.badRequest().body("Validation Failed: Empty upload bundle received.");
         }
 
+        String contentType = file.getContentType();
+        if (contentType == null || (!contentType.equals("text/csv") && !contentType.equals("application/vnd.ms-excel"))) {
+            log.warn("Rejected upload with invalid MIME type: {}", contentType);
+            return ResponseEntity.badRequest().body("Validation Failed: Only CSV files are allowed.");
+        }
+
         String operationResult = bookingService.importCsv(file);
         return ResponseEntity.ok(operationResult);
     }
