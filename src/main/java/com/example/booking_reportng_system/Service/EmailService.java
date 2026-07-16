@@ -6,23 +6,42 @@ import com.example.booking_reportng_system.models.Booking;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class EmailService {
 
+    private static final Logger LOGGER = Logger.getLogger(EmailService.class.getName());
+
     private final BookingRepository bookingRepository;
     private final JavaMailSender mailSender;
+
+    @Value("${app.report.recipient:manager@travelcorp.com}")
+    private String defaultRecipient;
 
     public EmailService(BookingRepository bookingRepository, JavaMailSender mailSender) {
         this.bookingRepository = bookingRepository;
         this.mailSender = mailSender;
+    }
+
+    @Scheduled(cron = "${app.report.cron}")
+    public void sendDailyAutomatedReport() {
+        LOGGER.info("Executing automated daily report scheduling...");
+        try {
+            generateAndSendReport(defaultRecipient.trim());
+            LOGGER.info("Automated daily report successfully delivered to " + defaultRecipient);
+        } catch (Exception e) {
+            LOGGER.severe("CRITICAL: Failed to send scheduled daily report: " + e.getMessage());
+        }
     }
 
     public void generateAndSendReport(String recipientEmail) throws Exception {
