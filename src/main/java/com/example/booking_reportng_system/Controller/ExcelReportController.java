@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/excel")
-@CrossOrigin(origins = "*") // Allows your separate HTML files to talk to this endpoint safely
+@CrossOrigin(origins = "*")
 public class ExcelReportController {
 
     private final ExcelExportService excelExportService;
@@ -26,12 +26,11 @@ public class ExcelReportController {
     }
 
     @GetMapping("/download")
-    @Operation(summary = "Download Bookings Excel Sheet", description = "Generates and downloads a clean workbook ledger containing all raw transactional rows.")
+    @Operation(summary = "Download Bookings Excel Sheet")
     public ResponseEntity<InputStreamResource> downloadExcel() {
         try {
             ByteArrayInputStream in = excelExportService.exportBookingsToExcel();
 
-            // Set download file headers
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Disposition", "attachment; filename=bookings_ledger_report.xlsx");
 

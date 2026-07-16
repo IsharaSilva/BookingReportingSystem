@@ -16,13 +16,11 @@ public class ExcelExportService {
 
     private final BookingRepository bookingRepository;
 
-    // Dependency Injection of your existing repository
     public ExcelExportService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
     }
 
     public ByteArrayInputStream exportBookingsToExcel() throws IOException {
-        // Fetch all 1,000+ data rows from the database
         List<Booking> bookings = bookingRepository.findAll();
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -30,18 +28,16 @@ public class ExcelExportService {
 
             Sheet sheet = workbook.createSheet("Bookings Raw Data");
 
-            // 1. Define Font Styles for Table Headers
             Font headerFont = workbook.createFont();
             headerFont.setBold(true);
             headerFont.setColor(IndexedColors.WHITE.getIndex());
 
             CellStyle headerCellStyle = workbook.createCellStyle();
             headerCellStyle.setFont(headerFont);
-            headerCellStyle.setFillBackgroundColor(IndexedColors.DARK_BLUE.getIndex());
+            headerCellStyle.setFillForegroundColor(IndexedColors.DARK_BLUE.getIndex());
             headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-            // 2. Setup Excel Column Header Names
             String[] columns = {"Booking No", "Agent", "Country", "Tour Type", "Booking Date", "Amount", "Status"};
             Row headerRow = sheet.createRow(0);
 
@@ -51,7 +47,6 @@ public class ExcelExportService {
                 cell.setCellStyle(headerCellStyle);
             }
 
-            // 3. Loop and Populate All Data Rows Natively
             int rowIndex = 1;
             for (Booking booking : bookings) {
                 Row row = sheet.createRow(rowIndex++);
@@ -61,18 +56,16 @@ public class ExcelExportService {
                 row.createCell(2).setCellValue(booking.getCountry());
                 row.createCell(3).setCellValue(booking.getTourType());
 
-                // Safe handling of Date fields converting to string format
                 if (booking.getBookingDate() != null) {
                     row.createCell(4).setCellValue(booking.getBookingDate().toString());
                 } else {
                     row.createCell(4).setCellValue("");
                 }
 
-                row.createCell(5).setCellValue(booking.getAmount());
-                row.createCell(6).setCellValue(booking.getStatus());
+                row.createCell(5).setCellValue(booking.getAmount() != null ? booking.getAmount() : 0.0);
+                row.createCell(6).setCellValue(booking.getStatus() != null ? booking.getStatus() : "");
             }
 
-            // 4. Auto-fit column widths so text does not clip out
             for (int i = 0; i < columns.length; i++) {
                 sheet.autoSizeColumn(i);
             }
