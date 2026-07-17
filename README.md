@@ -1,18 +1,19 @@
 # BookingReportingSystem
----
+---------------------------------------------------------
 
 ## Tech Stack & Requirements
-Language Core:** Java 17
-Framework:** Spring Boot 3.x
-Database Interface:** MySQL managed via XAMPP (phpMyAdmin)
-API Documentation :** OpenAPI Swagger UI
-Mail Sandbox Simulator:** Mailtrap (SMTP Debugger)
-Document Exporters:** OpenPDF (`com.lowagie.text`) & Apache POI
-Frontend :** Single Page Interface (Tailwind CSS v4 & Chart.js Engine) using HTML
+**Language Core: Java 17
+**Framework: Spring Boot
+**Database Interface:MySQL managed via XAMPP (phpMyAdmin)
+**API Documentation : OpenAPI Swagger UI
+**Mail Sandbox Simulator: Mailtrap (SMTP Debugger)
+**Document Exporters: OpenPDF (`com.lowagie.text`) & Apache POI
+**Frontend : Single Page Interface (Tailwind CSS v4 & Chart.js Engine) using HTML
 
----
+----------------------------------------------------------
 
 ##Project Installation & Execution
+
 #Initialize Database & Services (XAMPP & phpMyAdmin)
 Open the XAMPP Control Panel on your computer.
 Click Start next to Apache and MySQL.
@@ -105,6 +106,7 @@ POST /api/email/report
 
 
 #Bonus Tasks
+
 ##Excel Export API
 <img width="1486" height="901" alt="Excel generate" src="https://github.com/user-attachments/assets/7ee4505d-41e8-4ee8-bf31-971ecfe1f324" />
 
