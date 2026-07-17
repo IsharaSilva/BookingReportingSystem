@@ -2,6 +2,7 @@
 ---------------------------------------------------------
 
 ## Tech Stack & Requirements
+
 **Language Core: Java 17
 **Framework: Spring Boot
 **Database Interface:MySQL managed via XAMPP (phpMyAdmin)
@@ -12,9 +13,10 @@
 
 ----------------------------------------------------------
 
-##Project Installation & Execution
+**##Project Installation & Execution**
 
 #Initialize Database & Services (XAMPP & phpMyAdmin)
+
 Open the XAMPP Control Panel on your computer.
 Click Start next to Apache and MySQL.
 Open web browser and navigate to the admin portal:
@@ -22,20 +24,24 @@ Open web browser and navigate to the admin portal:
 
 Create a new database named booking_system_db in phpMyAdmin, or it will  automatically generate the DB when the Spring application is running.
 
-##Build & Boot the Spring Boot Application
+**##Build & Boot the Spring Boot Application**
+
 Using IDE(Intellij IDEA)
 mvn clean install
 mvn spring-boot:run
 Springboot app work - http://localhost:8080
 
-##Test APIs with OpenAPI Swagger UI
+**##Test APIs with OpenAPI Swagger UI**
+
 http://localhost:8080/swagger-ui/index.html
 
-##Launch the Front-End UI
+**##Launch the Front-End UI**
+
 Open the directory containing your UI visual file (dashboard.html).
 Double-click the file to open it in any web browser
 
-##Emails using Mailtrap Sandbox
+**##Emails using Mailtrap Sandbox**
+
 Open your browser, navigate to Mailtrap.io, and sign in to your developer dashboard.
 Open your configured target Email Testing Inbox.
 
@@ -43,11 +49,12 @@ Open your configured target Email Testing Inbox.
 
 #For Automated Background Execution Check: Keep the application engine running active. application properties file is already set to auto-hit.
 
-##Read CSV Data
+**##Read CSV Data**
 Goto sample-data folder in bookingReportingSystem; here has booking.csv file.
 then using Postman or the swagger api/booking/upload API, click and add that CSV file to read and save in DB.
 
 #Part 1 – Import Booking Data
+
 ** use Swagger to upload the csv file
 <img width="1502" height="923" alt="upload csv swagger n1000" src="https://github.com/user-attachments/assets/1b4387e9-8caf-40e2-87b6-9c9002542abd" />
 
@@ -86,6 +93,9 @@ GET /api/dashboard/monthly-revenue
 <img width="1279" height="796" alt="Charts UI" src="https://github.com/user-attachments/assets/a578c3d3-d47e-43f1-8059-05ffbe503a40" />
 
 #Part 4 – Email Sending with attachments
+
+Support for multiple recipients
+
 **Create an API
 POST /api/email/report
 <img width="1533" height="907" alt="email sent by swagger" src="https://github.com/user-attachments/assets/75382df3-953e-4059-91e2-85e8b3887e14" />
@@ -101,6 +111,7 @@ POST /api/email/report
 
 
 #Unit Tests
+
 **unit test for 3 services
 <img width="1361" height="549" alt="run test" src="https://github.com/user-attachments/assets/a1732286-97fc-4ec0-a57d-860e9b534ea5" />
 
