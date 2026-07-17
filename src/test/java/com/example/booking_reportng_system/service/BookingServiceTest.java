@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class BookingServiceTest {
@@ -30,7 +31,6 @@ class BookingServiceTest {
 
     @Test
     void testImportCsv_AllValidData() {
-        //A valid CSV file with all headers and parameters
         String csvContent = """
                 Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status
                 BKG100,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
@@ -52,12 +52,11 @@ class BookingServiceTest {
 
     @Test
     void testImportCsv_NegativeAmountAndInvalidFormat() {
-        //Row 2 has a negative amount, Row 3 has a non-numeric amount text string
         String csvContent = """
                 Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status
-                BKG200,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
-                BKG201,Agent Beta,Maldives,Leisure,2026-07-16,-50.00,Pending
-                BKG202,Agent Gamma,India,Culture,2026-07-17,FREE_PROMO,Confirmed
+                BKG200,Expedia,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
+                BKG201,TUI,Maldives,Leisure,2026-07-16,-50.00,Cancelled
+                BKG202, Agoda,India,Culture,2026-07-17,FREE_PROMO,Confirmed
                 """;
 
         MockMultipartFile file = new MockMultipartFile(
@@ -75,10 +74,9 @@ class BookingServiceTest {
 
     @Test
     void testImportCsv_MissingMandatoryFields() {
-        //Row 2 misses the 'Agent', Row 3 misses the 'Booking Date'
         String csvContent = """
                 Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status
-                BKG300,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
+                BKG300,Expedia,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
                 BKG301,,Sri Lanka,Adventure,2026-07-15,400.00,Confirmed
                 BKG302,Agent Gamma,India,Culture,,500.00,Confirmed
                 """;
@@ -97,19 +95,17 @@ class BookingServiceTest {
 
     @Test
     void testImportCsv_DuplicateBookingNumbers() {
-        // Row 2 is duplicated within the file. BKG_DB_EXIST is already saved in the database context.
         String csvContent = """
                 Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status
-                BKG400,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
-                BKG400,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
-                BKG_DB_EXIST,Agent Delta,UK,Business,2026-07-16,300.00,Confirmed
+                BKG400,Expedia,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
+                BKG400,TUI,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
+                BKG_DB_EXIST,Agoda,UK,Business,2026-07-16,300.00,Confirmed
                 """;
 
         MockMultipartFile file = new MockMultipartFile(
                 "file", "bookings.csv", "text/csv", csvContent.getBytes(StandardCharsets.UTF_8)
         );
 
-        // Mock DB tracking: BKG400 does not exist, but BKG_DB_EXIST returns true
         when(bookingRepository.existsByBookingNo("BKG400")).thenReturn(false, false);
         when(bookingRepository.existsByBookingNo("BKG_DB_EXIST")).thenReturn(true);
 
@@ -121,11 +117,10 @@ class BookingServiceTest {
 
     @Test
     void testImportCsv_InvalidDateFormat() {
-        //Row 2 has a broken calendar date pattern structure
         String csvContent = """
                 Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status
-                BKG500,Agent Alpha,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
-                BKG501,Agent Beta,Maldives,Leisure,15/07/2026,600.00,Pending
+                BKG500,Expedia,Sri Lanka,Adventure,2026-07-15,1200.00,Confirmed
+                BKG501,TUI,Maldives,Leisure,15/07/2026,600.00,Pending
                 """;
 
         MockMultipartFile file = new MockMultipartFile(

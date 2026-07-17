@@ -1,10 +1,10 @@
 package com.example.booking_reportng_system.models;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "bookings")
 public class Booking {
 
@@ -39,14 +40,4 @@ public class Booking {
     private Double amount;
 
     private String status;
-
-    public Booking(String bookingNo, String agent, String country, String tourType, LocalDate bookingDate, Double amount, String status) {
-        this.bookingNo = bookingNo;
-        this.agent = agent;
-        this.country = country;
-        this.tourType = tourType;
-        this.bookingDate = bookingDate;
-        this.amount = amount;
-        this.status = status;
-    }
 }

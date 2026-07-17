@@ -37,8 +37,9 @@ class ExcelExportServiceTest {
 
     @Test
     void testExportBookingsToExcel_Success() throws IOException {
-        Booking booking1 = new Booking("BKG001", "Sarah Jenkins", "United States", "Adventure", LocalDate.of(2026, 7, 15), 1250.00, "Confirmed");
-        Booking booking2 = new Booking("BKG002", "Michael Chang", "Germany", "Cultural", null, 890.00, "Cancelled");
+        Booking booking1 = new Booking("BKG001", "Expedia", "United States", "Adventure", LocalDate.of(2026, 7, 15), 1250.00, "Confirmed");
+        Booking booking2 = new Booking("BKG002", "TUI", "Germany", "Cultural", null, 890.00, "Cancelled");
+
         List<Booking> mockBookingsList = Arrays.asList(booking1, booking2);
 
         when(bookingRepository.findAll()).thenReturn(mockBookingsList);

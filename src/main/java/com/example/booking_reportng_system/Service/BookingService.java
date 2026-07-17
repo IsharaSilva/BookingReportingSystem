@@ -32,7 +32,6 @@ public class BookingService {
         int successCount = 0;
         int failureCount = 0;
         List<Booking> bookingsToSave = new ArrayList<>();
-
         Set<String> processedBookingNumbers = new HashSet<>();
 
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -40,7 +39,7 @@ public class BookingService {
             String headerLine = fileReader.readLine();
             if (headerLine == null) {
                 log.warn("CSV import aborted: The uploaded file has no headers or data.");
-                return "Validation Failed: Empty file framework uploaded.";
+                return "Validation Failed: Empty file uploaded.";
             }
 
             String[] headers = headerLine.split(",");
@@ -87,6 +86,8 @@ public class BookingService {
                         failureCount++;
                         continue;
                     }
+
+                    // Validate Duplicate Booking Numbers against the Database
                     if (bookingRepository.existsByBookingNo(bookingNo)) {
                         log.error("Row {} Skipped: Duplicate Booking Number '{}' already exists in the database.", rowNum, bookingNo);
                         failureCount++;

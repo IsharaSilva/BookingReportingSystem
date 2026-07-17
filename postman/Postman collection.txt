@@ -1,0 +1,7 @@
+Upload csv - Post- http://localhost:8080/api/bookings/upload
+Send Email - Post - http://localhost:8080/api/email/report?email=manager@company.com
+Download Excel Report - get- http://localhost:8080/api/excel/download
+Get Summary - http://localhost:8080/api/dashboard/summary
+Get Monthly revenue - get - http://localhost:8080/api/dashboard/monthly-revenue
+Get Agent booking counts - get - http://localhost:8080/api/dashboard/agent-bookings
+Get revenue by Country - get - http://localhost:8080/api/dashboard/revenue-country

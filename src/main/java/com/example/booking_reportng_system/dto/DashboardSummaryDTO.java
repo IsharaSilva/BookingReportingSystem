@@ -11,5 +11,6 @@ public class DashboardSummaryDTO {
     private long totalBookings;
     private long confirmed;
     private long cancelled;
+    private Long pending;
     private double totalRevenue;
 }

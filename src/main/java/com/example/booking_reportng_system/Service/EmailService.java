@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays; // Added missing import
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,7 +26,7 @@ public class EmailService {
     private final BookingRepository bookingRepository;
     private final JavaMailSender mailSender;
 
-    @Value("${app.report.recipient:manager@travelcorp.com}")
+    @Value("${app.report.recipient:manager@travel.com}")
     private String defaultRecipient;
 
     public EmailService(BookingRepository bookingRepository, JavaMailSender mailSender) {
@@ -37,14 +38,24 @@ public class EmailService {
     public void sendDailyAutomatedReport() {
         LOGGER.info("Executing automated daily report scheduling...");
         try {
-            generateAndSendReport(defaultRecipient.trim());
-            LOGGER.info("Automated daily report successfully delivered to " + defaultRecipient);
+            // Split the default recipient configuration in case it contains multiple emails
+            String[] recipients = Arrays.stream(defaultRecipient.split("[,;]"))
+                    .map(String::trim)
+                    .filter(e -> !e.isEmpty())
+                    .toArray(String[]::new);
+
+            generateAndSendReport(recipients);
+            LOGGER.info("Automated daily report successfully delivered.");
         } catch (Exception e) {
             LOGGER.severe("CRITICAL: Failed to send scheduled daily report: " + e.getMessage());
         }
     }
 
-    public void generateAndSendReport(String recipientEmail) throws Exception {
+    public void generateAndSendReport(String[] recipientEmails) throws Exception {
+        if (recipientEmails == null || recipientEmails.length == 0) {
+            throw new IllegalArgumentException("Recipient email array cannot be empty");
+        }
+
         DashboardSummaryDTO summary = bookingRepository.getDashboardSummary();
         List<Booking> allBookings = bookingRepository.findAll();
 
@@ -61,6 +72,7 @@ public class EmailService {
                     <tr><td><b>Total Bookings</b></td><td>%d</td></tr>
                     <tr><td><span style="color:green;">Confirmed Bookings</span></td><td>%d</td></tr>
                     <tr><td><span style="color:red;">Cancelled Bookings</span></td><td>%d</td></tr>
+                    <tr><td><span style="color:orange;">Pending Bookings</span></td><td>%d</td></tr>
                     <tr style="background-color: #eaf6ff;"><td><b>Total Revenue</b></td><td>$%s</td></tr>
                 </table>
                 <p><i>The complete booking summary sheet is attached below as a PDF document.</i></p>
@@ -70,13 +82,14 @@ public class EmailService {
                 summary.getTotalBookings(),
                 summary.getConfirmed(),
                 summary.getCancelled(),
+                summary.getPending(),
                 String.format("%,.2f", summary.getTotalRevenue())
         );
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setTo(recipientEmail);
+        helper.setTo(recipientEmails);
         helper.setSubject("Booking Summary Report");
         helper.setText(htmlBody, true);
         helper.setFrom("analytics@travelcorp.com");
@@ -103,6 +116,7 @@ public class EmailService {
         document.add(new Paragraph("Total Bookings: " + summary.getTotalBookings()));
         document.add(new Paragraph("Confirmed Bookings: " + summary.getConfirmed()));
         document.add(new Paragraph("Cancelled Bookings: " + summary.getCancelled()));
+        document.add(new Paragraph("Pending Bookings: " + summary.getPending()));
         document.add(new Paragraph("Total Revenue: $" + String.format("%,.2f", summary.getTotalRevenue())));
 
         document.close();

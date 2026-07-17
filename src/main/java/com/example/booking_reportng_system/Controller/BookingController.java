@@ -28,10 +28,10 @@ public class BookingController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Upload Booking CSV File")
     public ResponseEntity<String> uploadCsv(
-            @Parameter(description = "Target CSV spreadsheet parsing system configurations", required = true)
+            @Parameter(description = "The CSV file containing booking records to import", required = true)
             @RequestParam("file") MultipartFile file) {
 
-        log.info("REST Request received at /api/bookings/upload. Content size: {} bytes", file.getSize());
+        log.info("Received CSV upload request. File size: {} bytes", file.getSize());
 
         if (file.isEmpty()) {
             log.warn("Rejected incoming upload: File bundle parameter payload is empty.");

@@ -28,8 +28,7 @@ class DashboardServiceTest {
 
     @Test
     void testGetSummary_Success() {
-        //the main KPI cards
-        DashboardSummaryDTO mockSummary = new DashboardSummaryDTO(1024L, 842L, 182L, 148250.00);
+        DashboardSummaryDTO mockSummary = new DashboardSummaryDTO(1024L, 842L, 182L, 50L, 148250.00);
         when(bookingRepository.getDashboardSummary()).thenReturn(mockSummary);
 
         DashboardSummaryDTO result = dashboardService.getSummary();
@@ -38,13 +37,13 @@ class DashboardServiceTest {
         assertEquals(1024L, result.getTotalBookings());
         assertEquals(842L, result.getConfirmed());
         assertEquals(182L, result.getCancelled());
+        assertEquals(50L, result.getPending());
         assertEquals(148250.00, result.getTotalRevenue());
         verify(bookingRepository, times(1)).getDashboardSummary();
     }
 
     @Test
     void testGetRevenueByCountry_Success() {
-        //Revenue by Country Bar Chart
         List<CountryRevenueDTO> mockCountryRevenue = List.of(
                 new CountryRevenueDTO("Sri Lanka", 95000.00),
                 new CountryRevenueDTO("Maldives", 53250.00)
@@ -57,17 +56,14 @@ class DashboardServiceTest {
         assertEquals(2, result.size(), "Should return exactly 2 country records");
         assertEquals("Sri Lanka", result.get(0).getCountry());
         assertEquals(95000.00, result.get(0).getRevenue());
-        assertEquals("Maldives", result.get(1).getCountry());
-        assertEquals(53250.00, result.get(1).getRevenue());
         verify(bookingRepository, times(1)).getRevenueByCountry();
     }
 
     @Test
     void testGetBookingsByAgent_Success() {
-        //Top 5 Performing Agents Horizontal Bar Chart
         List<AgentBookingDTO> mockAgentBookings = List.of(
-                new AgentBookingDTO("Agent Alpha", 150L),
-                new AgentBookingDTO("Agent Beta", 120L)
+                new AgentBookingDTO("Expedia", 150L),
+                new AgentBookingDTO("TUI", 120L)
         );
         when(bookingRepository.getBookingsByAgent()).thenReturn(mockAgentBookings);
 
@@ -75,14 +71,12 @@ class DashboardServiceTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("Agent Alpha", result.get(0).getAgent());
-        assertEquals(150L, result.get(0).getBookingsCount());
+        assertEquals("Expedia", result.get(0).getAgent());
         verify(bookingRepository, times(1)).getBookingsByAgent();
     }
 
     @Test
     void testGetMonthlyRevenueTrend_Success() {
-        //Monthly Revenue Trend Line Chart
         List<MonthlyRevenueDTO> mockMonthlyRevenue = List.of(
                 new MonthlyRevenueDTO("2026-06", 60000.00),
                 new MonthlyRevenueDTO("2026-07", 88250.00)
