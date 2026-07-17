@@ -14,7 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays; // Added missing import
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -38,7 +38,6 @@ public class EmailService {
     public void sendDailyAutomatedReport() {
         LOGGER.info("Executing automated daily report scheduling...");
         try {
-            // Split the default recipient configuration in case it contains multiple emails
             String[] recipients = Arrays.stream(defaultRecipient.split("[,;]"))
                     .map(String::trim)
                     .filter(e -> !e.isEmpty())
