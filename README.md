@@ -27,9 +27,12 @@ Create a new database named booking_system_db in phpMyAdmin, or it will  automat
 **##Build & Boot the Spring Boot Application**
 
 Using IDE(Intellij IDEA)
-mvn clean install
-mvn spring-boot:run
-Springboot app work - http://localhost:8080
+
+#mvn clean install
+
+#mvn spring-boot:run
+
+#Springboot app work - **http://localhost:8080**
 
 **##Test APIs with OpenAPI Swagger UI**
 
@@ -37,12 +40,13 @@ http://localhost:8080/swagger-ui/index.html
 
 **##Launch the Front-End UI**
 
-Open the directory containing UI visual file (**dashboard.html**__).
+Open the directory containing UI visual file (**dashboard.html**).
 Double-click the file to open it in any web browser
 
 **##Emails using Mailtrap Sandbox**
 
 Open your browser, navigate to Mailtrap.io, and sign in to your developer dashboard.
+
 Open your configured target Email Testing Inbox.
 
 #For Manual Ad-Hoc Check: Input an email address inside your dashboard UI component and click Send Email, or fire a direct request using the Swagger Panel interface.
