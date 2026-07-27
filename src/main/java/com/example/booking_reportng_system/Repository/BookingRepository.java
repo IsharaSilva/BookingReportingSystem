@@ -39,4 +39,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             "GROUP BY YEAR(b.bookingDate), MONTH(b.bookingDate) " +
             "ORDER BY YEAR(b.bookingDate) ASC, MONTH(b.bookingDate) ASC")
     List<MonthlyRevenueDTO> getMonthlyRevenueTrend();
+
+    @Query("SELECT sum(b.gp) FROM Booking b")
+    Double findAllGpValues();
 }

@@ -30,4 +30,9 @@ public class DashboardService {
     public List<MonthlyRevenueDTO> getMonthlyRevenueTrend() {
         return bookingRepository.getMonthlyRevenueTrend();
     }
+
+
+    public Double getGP() {
+        return bookingRepository.findAllGpValues();
+    }
 }

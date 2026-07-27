@@ -43,4 +43,9 @@ public class DashboardController {
     public ResponseEntity<List<MonthlyRevenueDTO>> getMonthlyRevenueTrend() {
         return ResponseEntity.ok(dashboardService.getMonthlyRevenueTrend());
     }
+
+    @GetMapping("/gp-value")
+    public ResponseEntity<Double> getGP() {
+        return ResponseEntity.ok(dashboardService.getGP());
+    }
 }

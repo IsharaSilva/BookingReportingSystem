@@ -107,6 +107,7 @@
             });
             const gpValue = (totalGp !== null && totalGp !== undefined) ? totalGp : 0;
             docgit pull origin mainument.getElementById('kpi-gp').textContent = '$' + gpValue.toLocaleString(undefined, {
+            document.getElementById('kpi-gp').textContent = '$' + gpValue.toLocaleString(undefined, {
                 minimumFractionDigits: 2, maximumFractionDigits: 2
             });
 
@@ -172,7 +173,7 @@
             console.error("Dashboard error during initialization:", e);
         }
     }
-//run initializeDashboard function only after the browser has completely parsed
+
     document.addEventListener('DOMContentLoaded', initializeDashboard);
 </script>
 </body>

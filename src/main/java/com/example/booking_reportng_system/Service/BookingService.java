@@ -43,7 +43,7 @@ public class BookingService {
             }
 
             String[] headers = headerLine.split(",");
-            int idxBookingNo = -1, idxAgent = -1, idxCountry = -1, idxTourType = -1, idxDate = -1, idxAmount = -1, idxStatus = -1;
+            int idxBookingNo = -1, idxAgent = -1, idxCountry = -1, idxTourType = -1, idxDate = -1, idxAmount = -1, idxStatus = -1, idxGP = -1;
 
             for (int i = 0; i < headers.length; i++) {
                 String header = headers[i].replace("\"", "").trim();
@@ -54,6 +54,7 @@ public class BookingService {
                 else if (header.equalsIgnoreCase("Booking Date")) idxDate = i;
                 else if (header.equalsIgnoreCase("Amount")) idxAmount = i;
                 else if (header.equalsIgnoreCase("Status")) idxStatus = i;
+                else if (header.equalsIgnoreCase("GP")) idxGP = i;
             }
 
             String line;
@@ -72,6 +73,7 @@ public class BookingService {
                     String bookingDateStr = cleanToken(tokens[idxDate]);
                     String amountStr = cleanToken(tokens[idxAmount]);
                     String status = cleanToken(tokens[idxStatus]);
+                    String gp = cleanToken(tokens[idxGP]);
 
                     // Validate Mandatory Fields
                     if (bookingNo.isBlank() || agent.isBlank() || country.isBlank() || amountStr.isBlank() || bookingDateStr.isBlank()) {
@@ -121,7 +123,7 @@ public class BookingService {
                         continue;
                     }
 
-                    Booking booking = new Booking(bookingNo, agent, country, tourType, bookingDate, amount, status);
+                    Booking booking = new Booking(bookingNo, agent, country, tourType, bookingDate, amount, status, Double.parseDouble(gp));
                     bookingsToSave.add(booking);
                     successCount++;
 

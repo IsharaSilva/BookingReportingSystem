@@ -40,4 +40,5 @@ public class Booking {
     private Double amount;
 
     private String status;
+    private Double gp;
 }
