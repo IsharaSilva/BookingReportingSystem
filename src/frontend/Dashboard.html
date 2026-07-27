@@ -28,7 +28,8 @@
         </div>
     </header>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" id="kpi-grid"></div>
+<!--     Acts as empty container placeholders. The JavaScript code dynamically inserts the KPI cards into kpi-grid and the chart canvas cards into charts-grid.-->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10" id="kpi-grid"></div>
 
     <div id="charts-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8"></div>
 </div>
@@ -36,12 +37,13 @@
 <script>
     const API_BASE = 'http://localhost:8080/api/dashboard';
 
-    // KPI Configs
+    // KPI Configs - An array of configuration objects for the top 4 metric boxes (Total Bookings, Confirmed, Cancelled, Gross Revenue). It holds each element's unique id, label title, and styling classes.
     const kpiConfigs = [
         { id: 'kpi-total', title: 'Total Bookings', themeClass: 'bg-slate-50 border-slate-200 text-slate-800', info: 'Total raw records.' },
         { id: 'kpi-confirmed', title: 'Confirmed', themeClass: 'bg-slate-50 border-emerald-200 text-emerald-800', info: 'Successfully finalized transactions.' },
         { id: 'kpi-cancelled', title: 'Cancelled', themeClass: 'bg-slate-50 border-rose-200 text-rose-800', info: 'customer cancellations.' },
-        { id: 'kpi-revenue', title: 'Gross Revenue', themeClass: 'bg-slate-50 border-blue-200 text-blue-800', info: 'Total revenue.' }
+        { id: 'kpi-revenue', title: 'Gross Revenue', themeClass: 'bg-slate-50 border-blue-200 text-blue-800', info: 'Total revenue.' },
+        { id: 'kpi-gp', title: 'Gross profit', themeClass: 'bg-slate-50 border-blue-200 text-blue-800', info: 'Total gross.' }
     ];
 
     // Chart Configs
@@ -52,7 +54,7 @@
         { id: 'chart-top-agents', title: 'Top 5 Performing Agents', info: 'Top agents ranked by bookings.' }
     ];
 
-    // Render HTML KPIs
+    // Render HTML KPIs - Loops over kpiConfigs using .map(), converts each configuration into an HTML card, and inserts them directly into the kpi-grid element.
     document.getElementById('kpi-grid').innerHTML = kpiConfigs.map(kpi => `
         <div class="${kpi.themeClass} p-6 rounded-2xl border shadow-sm relative overflow-hidden flex flex-col justify-between min-w-0">
             <div class="flex justify-between items-start gap-2">
@@ -76,7 +78,7 @@
         </div>
     `).join('');
 
-    // Fetch helper
+    // Fetch helper- It calls the backend endpoint (e.g., /summary), throws an error if the request fails,parses the returned JSON response into a native JavaScript object.
     async function getData(endpoint) {
         const response = await fetch(`${API_BASE}${endpoint}`);
         if (!response.ok) throw new Error(`Failed to load: ${endpoint}`);
@@ -84,21 +86,28 @@
     }
 
     // Initialize Dashboard Charts & Data bindings
+    //Executes all 4 backend API calls simultaneously in parallel using Promise.all(). This speeds up page loading instead of waiting for each API call to finish one after another.
     async function initializeDashboard() {
         try {
-            const [summary, countryData, agentData, monthlyData] = await Promise.all([
+            const [summary, countryData, agentData, monthlyData, totalGp] = await Promise.all([
                 getData('/summary'),
                 getData('/revenue-country'),
                 getData('/agent-bookings'),
-                getData('/monthly-revenue')
+                getData('/monthly-revenue'),
+                getData('/gp-value')
             ]);
 
             // Update KPI Metrics
+            //Takes the returned JSON data from the backend (summary) and updates the HTML card text values. .toLocaleString() formats raw numbers with commas (e.g., 1000 becomes 1,000).
             document.getElementById('kpi-total').textContent = summary.totalBookings.toLocaleString();
             document.getElementById('kpi-confirmed').textContent = summary.confirmed.toLocaleString();
             document.getElementById('kpi-cancelled').textContent = summary.cancelled.toLocaleString();
             document.getElementById('kpi-revenue').textContent = '$' + summary.totalRevenue.toLocaleString(undefined, {
                 minimumFractionDigits: 2, maxFractionDigits: 2
+            });
+            const gpValue = (totalGp !== null && totalGp !== undefined) ? totalGp : 0;
+            docgit pull origin mainument.getElementById('kpi-gp').textContent = '$' + gpValue.toLocaleString(undefined, {
+                minimumFractionDigits: 2, maximumFractionDigits: 2
             });
 
             // Set Chart Defaults
@@ -109,9 +118,11 @@
             new Chart(document.getElementById('chart-monthly-revenue'), {
                 type: 'line',
                 data: {
+                //horizontal axis-month
                     labels: monthlyData.map(item => item.month),
                     datasets: [{
                         label: 'Revenue ($)',
+                        //vertical axis-revenue
                         data: monthlyData.map(item => item.revenue),
                         borderColor: '#10b981',
                         tension: 0.35,
@@ -161,7 +172,7 @@
             console.error("Dashboard error during initialization:", e);
         }
     }
-
+//run initializeDashboard function only after the browser has completely parsed
     document.addEventListener('DOMContentLoaded', initializeDashboard);
 </script>
 </body>

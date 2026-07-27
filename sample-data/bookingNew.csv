@@ -1,0 +1,11 @@
+Booking No,Agent,Country,Tour Type,Booking Date,Amount,Status,Gp
+BK-1001,"Global Travel Inc",USA,"Adventure Travel",2024-01-15,1250.00,CONFIRMED,101
+BK-1002,"Sunrise Holidays",UK,"Cultural Tour",2024-01-16,850.50,CONFIRMED,102
+BK-1003,"Asia Expeditions",Japan,"Wildlife Safari",2024-01-18,2100.00,PENDING,101
+BK-1004,"Pacific Escapes",Australia,"Beach Resort",2024-01-20,1750.25,CONFIRMED,103
+BK-1005,"Alpine Tours",Germany,"Hiking & Trekking",2024-01-22,990.00,CANCELLED,104
+BK-1006,"Global Travel Inc",USA,"Cultural Tour",2024-01-25,1100.00,CONFIRMED,101
+BK-1007,"Nordic Voyages",Norway,"Cruise & Water",2024-01-28,3400.00,CONFIRMED,105
+BK-1008,"Sunrise Holidays",UK,"Adventure Travel",2024-02-01,1420.00,PENDING,102
+BK-1009,"Lotus Getaways",Vietnam,"Culinary Tour",2024-02-03,780.00,CONFIRMED,106
+BK-1010,"Ahorn Reisen",Canada,"Skiing & Winter",2024-02-05,2890.00,CONFIRMED,107
